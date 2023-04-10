@@ -1,0 +1,106 @@
+# *** CORE V8
+    Options -Indexes
+    ServerSignature Off
+    FileETag None
+
+    Header unset Server
+    Header unset ETag
+    
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    RewriteCond %{REQUEST_METHOD} !^(GET|POST|HEAD|PURGE) [NC]
+    RewriteRule ^(.*)$ - [F,L]
+
+    RewriteCond %{QUERY_STRING} ([a-z0-9]{550,}) [NC,OR]
+    RewriteCond %{REQUEST_URI} ([a-z0-9]{550,}) [NC,OR]
+    RewriteCond %{HTTP_REFERER} ([a-z0-9]{550,}) [NC]
+    RewriteRule ^(.*)$ - [F,L]
+
+    RewriteCond %{THE_REQUEST} !HTTP\/1\.1 [NC]
+    RewriteCond %{THE_REQUEST} !HTTP\/2\.?.? [NC]
+    RewriteCond %{THE_REQUEST} !HTTP\/3\.?.? [NC]
+    RewriteRule ^(.*)$ - [F,L]
+</IfModule>
+
+<IfModule php_module>
+    php_flag display_errors Off
+    php_flag html_errors Off
+    php_value session.cookie_httponly "1"
+    php_value session.cookie_secure "1"
+    php_value session.cookie_samesite Lax
+    php_flag session.use_strict_mode On
+</IfModule>
+
+<IfModule mod_headers.c>
+    Header always set Strict-Transport-Security "max-age=47304000; includeSubdomains; preload"
+    Header always set Content-Security-Policy: "upgrade-insecure-requests; frame-ancestors 'self';"
+    Header always set X-Frame-Options: "SAMEORIGIN"
+    Header always set X-Content-Type-Options: "nosniff"
+    Header always set Referrer-Policy "no-referrer-when-downgrade"
+    Header always set X-XSS-Protection 0
+	Header always edit Set-Cookie (.*) "$1; HttpOnly; SameSite=Lax; Secure"
+    Header always set X-Permitted-Cross-Domain-Policies "none"
+    Header always set X-Download-Options "noopen"
+    Header always set Permissions-Policy: camera=(), microphone=(), usb=(), geolocation=(self)
+    Header always unset X-Powered-By
+</IfModule>
+
+<IfModule mod_filter.c>
+	<IfModule mod_deflate.c>
+
+    AddOutputFilterByType DEFLATE application/javascript
+    AddOutputFilterByType DEFLATE application/rss+xml
+    AddOutputFilterByType DEFLATE application/vnd.ms-fontobject
+    AddOutputFilterByType DEFLATE application/x-font
+    AddOutputFilterByType DEFLATE application/x-font-opentype
+    AddOutputFilterByType DEFLATE application/x-font-otf
+    AddOutputFilterByType DEFLATE application/x-font-truetype
+    AddOutputFilterByType DEFLATE application/x-font-ttf
+    AddOutputFilterByType DEFLATE application/x-font-woff
+    AddOutputFilterByType DEFLATE application/x-javascript
+    AddOutputFilterByType DEFLATE application/xhtml+xml
+    AddOutputFilterByType DEFLATE application/xml
+    AddOutputFilterByType DEFLATE font/opentype
+    AddOutputFilterByType DEFLATE font/otf
+    AddOutputFilterByType DEFLATE font/ttf
+    AddOutputFilterByType DEFLATE font/woff
+    AddOutputFilterByType DEFLATE image/svg+xml
+    AddOutputFilterByType DEFLATE image/x-icon
+    AddOutputFilterByType DEFLATE text/css
+    AddOutputFilterByType DEFLATE text/html
+    AddOutputFilterByType DEFLATE text/javascript
+    AddOutputFilterByType DEFLATE text/plain
+    AddOutputFilterByType DEFLATE text/xml
+
+    AddType application/vnd.ms-fontobject .eot
+    AddType font/ttf .ttf
+    AddType font/otf .otf
+    AddType font/x-woff .woff
+    AddType image/svg+xml .svg
+
+		<IfModule mod_headers.c>
+    Header append Vary User-Agent
+		</IfModule>
+	</IfModule>
+</IfModule>
+
+<IfModule mod_headers.c>
+
+    <FilesMatch "\.(pl|py|php|cgi|spl|scgi|fcgi)$">
+    	Header unset Cache-Control
+    </FilesMatch>
+    <FilesMatch "\.(html)$">
+        Header set Cache-Control "max-age=90, must-revalidate, private"
+    </FilesMatch>
+    <FilesMatch "\.(js|css)$">
+        Header set Cache-Control "max-age=86400, must-revalidate, stale-while-revalidate=43200, public"
+    </FilesMatch>
+    <FilesMatch "\.(webp|jpg|jpeg|png|gif|pdf|x-icon|webm|mp4|ogg)$">
+        Header set Cache-Control "max-age=31536000, must-revalidate, stale-while-revalidate=86400, public"
+    </FilesMatch>
+    <FilesMatch "\.(eot|svg|ttf|otf|woff|woff2)$">
+        Header set Cache-Control "max-age=31536000, must-revalidate, stale-while-revalidate=86400, public"
+    </FilesMatch>
+</IfModule>
+# ***
