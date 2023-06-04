@@ -9,7 +9,7 @@
 <IfModule mod_rewrite.c>
     RewriteEngine On
 
-    RewriteCond %{REQUEST_METHOD} !^(GET|POST|HEAD|PURGE) [NC]
+    RewriteCond %{REQUEST_METHOD} !^(GET|POST|HEAD|PURGE|TRACE) [NC]
     RewriteRule ^(.*)$ - [F,L]
 
     RewriteCond %{QUERY_STRING} ([a-z0-9]{550,}) [NC,OR]
