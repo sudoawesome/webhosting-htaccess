@@ -28,11 +28,13 @@
     RewriteRule ^wp-includes/js/tinymce/langs/.+\.php - [F,L]
     RewriteRule ^wp-includes/theme-compat/ - [F,L]
     RewriteRule ^\.(ht.+(ss)|git|gitlab|svn|env) - [F,L]
-    RewriteRule (^|/)\.(?!well-known) - [F,L]
     RewriteRule ^[^/]+\.(7z|apk|ar|bz2|cbz|cpio|gz|iso|jar|lzma|tar|war|xz|zip|zst|rar|log|sql)$ - [F,L]
     RewriteRule ^(system|vendor)/(.*)\.(txt|xml|md|html|json|yaml|yml|php|pl|py|cgi|twig|sh|bat)$ [F,L]
     RewriteRule ^(user)/(.*)\.(txt|md|json|yaml|yml|php|pl|py|cgi|twig|sh|bat)$ - [F,L]
     RewriteRule ^(LICENSE\.txt|composer\.lock|composer\.json)$ - [F,L]
+    RewriteRule (user|php)\.ini$ - [F,L]
+    RewriteRule (^|/)\.(?!well-known) - [F,L]
+
     RewriteRule (chmod|wget)(.*)([0-7]{3,})|(chmod|wget)(.*)(u|g|o|a)(=?|\+|\-)(r|w|x|X|s|t) - [F,L]
 
     RewriteCond %{REQUEST_URI} ({{|}}|{%|%}) [NC,OR]
