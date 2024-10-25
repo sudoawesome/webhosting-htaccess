@@ -32,7 +32,7 @@
     RewriteRule ^(system|vendor)/(.*)\.(txt|xml|md|html|json|yaml|yml|php|pl|py|cgi|twig|sh|bat)$ [F,L]
     RewriteRule ^(user)/(.*)\.(txt|md|json|yaml|yml|php|pl|py|cgi|twig|sh|bat)$ - [F,L]
     RewriteRule ^(LICENSE\.txt|composer\.lock|composer\.json)$ - [F,L]
-    RewriteRule (user|php)\.ini$ - [F,L]
+    RewriteRule (user|php|sql|error)(\.|\_)(ini|log|bak)$ - [F,L]
     RewriteRule (^|/)\.(?!well-known) - [F,L]
 
     RewriteCond %{QUERY_STRING} ((\%27)|('))|((\%3C)|<)((\%69)|i|(\%49))((\%6D)|m|(\%4D))((\%67)|g|(\%47))[^\n]+((\%3E)|>) [NC,OR]
