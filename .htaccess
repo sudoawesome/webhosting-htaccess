@@ -54,8 +54,6 @@
     RewriteCond %{REQUEST_URI} ((\%3C)|<)((\%2F)|\\/)*[a-z0-9\%]+((\%3E)|>)|((\%3C)|<)[^\n]+((\%3E)|>) [NC,OR]
     RewriteCond %{REQUEST_URI} ((\%3D)|(=))[^\n]*((\%27)|(\\')|(\\-\\-)|(\%3B)|(;)) [NC,OR]
     RewriteCond %{REQUEST_URI} (<|%3C)([^s]*s)+cript.*(>|%3E) [NC,OR]
-    RewriteCond %{REQUEST_URI} (?i:^[\W\d]+\s*?(?:alter|union)\b) [NC,OR]
-    RewriteCond %{REQUEST_URI} (\W{2}sleep\(\s*?\d*?\s*?\)|benchmark\(.*?\,.*?\)) [NC,OR]
     RewriteCond %{REQUEST_URI} (\^|`|<|>|\\|\|)|({{|}}|{%|%})|({{|}}|{%25|%25}) [NC,OR]
     RewriteCond %{REQUEST_URI} (localhost|loopback|127\.0) [NC,OR]
     RewriteCond %{REQUEST_URI} GLOBALS(=|\[|\%[0-9A-Z]{0,2}) [NC,OR]
