@@ -1,4 +1,4 @@
-# *** CORE V9
+# *** CORE V10
     Options -Indexes
     ServerSignature Off
     FileETag None
@@ -28,42 +28,26 @@
     RewriteRule ^wp-includes/js/tinymce/langs/.+\.php - [F,L]
     RewriteRule ^wp-includes/theme-compat/ - [F,L]
     RewriteRule ^\.(ht.+(ss)|git|gitlab|svn|env) - [F,L]
+    RewriteRule (^|/)\.(?!well-known) - [F,L]
     RewriteRule ^[^/]+\.(7z|apk|ar|bz2|cbz|cpio|gz|iso|jar|lzma|tar|war|xz|zip|zst|rar|log|sql)$ - [F,L]
     RewriteRule ^(system|vendor)/(.*)\.(txt|xml|md|html|json|yaml|yml|php|pl|py|cgi|twig|sh|bat)$ [F,L]
     RewriteRule ^(user)/(.*)\.(txt|md|json|yaml|yml|php|pl|py|cgi|twig|sh|bat)$ - [F,L]
     RewriteRule ^(LICENSE\.txt|composer\.lock|composer\.json)$ - [F,L]
-    RewriteRule (user|php|sql|error)(\.|\_)(ini|log|bak)$ - [F,L]
-    RewriteRule (^|/)\.(?!well-known) - [F,L]
 
-    RewriteCond %{QUERY_STRING} ((\%27)|('))|((\%3C)|<)((\%69)|i|(\%49))((\%6D)|m|(\%4D))((\%67)|g|(\%47))[^\n]+((\%3E)|>) [NC,OR]
-    RewriteCond %{QUERY_STRING} ((\%3C)|<)((\%2F)|\\/)*[a-z0-9\%]+((\%3E)|>)|((\%3C)|<)[^\n]+((\%3E)|>) [NC,OR]
-    RewriteCond %{QUERY_STRING} ((\%3D)|(=))[^\n]*((\%27)|(\\')|(\\-\\-)|(\%3B)|(;)) [NC,OR]
-    RewriteCond %{QUERY_STRING} (<|%3C)([^s]*s)+cript.*(>|%3E) [NC,OR]
-    RewriteCond %{QUERY_STRING} (?i:^[\W\d]+\s*?(?:alter|union)\b) [NC,OR]
-    RewriteCond %{QUERY_STRING} (\W{2}sleep\(\s*?\d*?\s*?\)|benchmark\(.*?\,.*?\)) [NC,OR]
-    RewriteCond %{QUERY_STRING} (\^|`|<|>|\\|\|)|({{|}}|{%|%})|({{|}}|{%25|%25}) [NC,OR]
-    RewriteCond %{QUERY_STRING} (localhost|loopback|127\.0) [NC,OR]
-    RewriteCond %{QUERY_STRING} GLOBALS(=|\[|\%[0-9A-Z]{0,2}) [NC,OR]
-    RewriteCond %{QUERY_STRING} \'?.*?(or|and|where|order\s+by)\s+[^\s]+(;|--|#|\'|\/\*) [NC,OR]
-    RewriteCond %{QUERY_STRING} \W\s+union[\sal]+select\s+([\'\"0-9]|null|user|subs) [NC,OR]
-    RewriteCond %{QUERY_STRING} \s+(or|and)\s+(\d+|true|false|\'\w+\'|)\s*!?=(\d+|true|false|\'\w+\'|) [NC,OR]
-    RewriteCond %{QUERY_STRING} _REQUEST(=|\[|\%[0-9A-Z]{0,2}) [NC,OR]
+    RewriteCond %{REQUEST_URI} ({{|}}|{%|%}) [NC,OR]
+    RewriteCond %{QUERY_STRING} ({{|}}|{%25|%25}) [NC,OR]
     RewriteCond %{QUERY_STRING} base64_encode[^(]*\([^)]*\) [NC,OR]
-    
-    RewriteCond %{REQUEST_URI} ((\%27)|('))|((\%3C)|<)((\%69)|i|(\%49))((\%6D)|m|(\%4D))((\%67)|g|(\%47))[^\n]+((\%3E)|>) [NC,OR]
-    RewriteCond %{REQUEST_URI} ((\%3C)|<)((\%2F)|\\/)*[a-z0-9\%]+((\%3E)|>)|((\%3C)|<)[^\n]+((\%3E)|>) [NC,OR]
-    RewriteCond %{REQUEST_URI} ((\%3D)|(=))[^\n]*((\%27)|(\\')|(\\-\\-)|(\%3B)|(;)) [NC,OR]
-    RewriteCond %{REQUEST_URI} (<|%3C)([^s]*s)+cript.*(>|%3E) [NC,OR]
-    RewriteCond %{REQUEST_URI} (\^|`|<|>|\\|\|)|({{|}}|{%|%})|({{|}}|{%25|%25}) [NC,OR]
-    RewriteCond %{REQUEST_URI} (localhost|loopback|127\.0) [NC,OR]
-    RewriteCond %{REQUEST_URI} GLOBALS(=|\[|\%[0-9A-Z]{0,2}) [NC,OR]
-    RewriteCond %{REQUEST_URI} \'?.*?(or|and|where|order\s+by)\s+[^\s]+(;|--|#|\'|\/\*) [NC,OR]
-    RewriteCond %{REQUEST_URI} \W\s+union[\sal]+select\s+([\'\"0-9]|null|user|subs) [NC,OR]
-    RewriteCond %{REQUEST_URI} \s+(or|and)\s+(\d+|true|false|\'\w+\'|)\s*!?=(\d+|true|false|\'\w+\'|) [NC,OR]
-    RewriteCond %{REQUEST_URI} _REQUEST(=|\[|\%[0-9A-Z]{0,2}) [NC,OR]
-    RewriteCond %{REQUEST_URI} base64_encode[^(]*\([^)]*\) [NC,OR]
-    
+    RewriteCond %{QUERY_STRING} (<|%3C)([^s]*s)+cript.*(>|%3E) [NC,OR]
+    RewriteCond %{QUERY_STRING} GLOBALS(=|\[|\%[0-9A-Z]{0,2}) [NC,OR]
+    RewriteCond %{QUERY_STRING} _REQUEST(=|\[|\%[0-9A-Z]{0,2}) [NC,OR]
+    RewriteCond %{QUERY_STRING} (<|>|'|%0A|%0D|%27|%3C|%3E|%00) [NC,OR]
+    RewriteCond %{QUERY_STRING} (localhost|loopback|127\.0) [NC]
+    RewriteRule ^(.*)$ - [F,L]
+
     RewriteCond %{HTTP_USER_AGENT} (base64_decode|Go-http-client|zgrab|eval|g00g1e|masscan|nikto|nutch|nuclei|python-requests|snoopy|sqlmap|sux0r) [NC]
+    RewriteRule ^(.*)$ - [F,L]
+
+    RewriteCond %{HTTP_COOKIE} (<|>|\'|%0A|%0D|%27|%3C|%3E|%00) [NC]
     RewriteRule ^(.*)$ - [F,L]
 </IfModule>
 
