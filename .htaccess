@@ -1,4 +1,4 @@
-# *** SS CORE V11
+# *** SS CORE V12
 
 # Server Settings
 Options -Indexes
@@ -11,9 +11,9 @@ ServerSignature Off
     RewriteCond %{REQUEST_METHOD} !^(GET|POST|HEAD|PURGE|PUT|TRACE|DELETE) [NC]
     RewriteRule ^(.*)$ - [F,L]
 
-    RewriteCond %{QUERY_STRING} ([a-z0-9]{550,}) [NC,OR]
-    RewriteCond %{REQUEST_URI} ([a-z0-9]{550,}) [NC,OR]
-    RewriteCond %{HTTP_REFERER} ([a-z0-9]{550,}) [NC]
+    RewriteCond %{QUERY_STRING} ([a-z0-9]{850,}) [NC,OR]
+    RewriteCond %{REQUEST_URI} ([a-z0-9]{850,}) [NC,OR]
+    RewriteCond %{HTTP_REFERER} ([a-z0-9]{850,}) [NC]
     RewriteRule ^(.*)$ - [F,L]
 
     RewriteCond %{THE_REQUEST} !HTTP\/1\.1 [NC]
@@ -61,38 +61,37 @@ ServerSignature Off
     Header always set Referrer-Policy "no-referrer-when-downgrade"
     Header always set X-XSS-Protection 0
     Header always set X-Permitted-Cross-Domain-Policies "none"
-    Header always set X-Download-Options "noopen"
     Header always set Permissions-Policy "camera=(self), microphone=(self), geolocation=(self)"
     Header always unset X-Powered-By
     
-    # Browser Caching
-    Header unset ETag
-    FileETag None
-    <FilesMatch "\.(pl|py|php|cgi|spl|scgi|fcgi)$">
-        Header unset Cache-Control
+# Browser Caching
+FileETag MTime Size
+<IfModule mod_headers.c>
+    <FilesMatch "\.(css|js|woff2|woff|ttf|otf|eot)$">
+    Header set Cache-Control "public, max-age=31536000, immutable"
     </FilesMatch>
+
+    <FilesMatch "\.(jpg|jpeg|png|gif|webp|avif|ico|svg)$">
+    Header set Cache-Control "public, max-age=31536000, immutable"
+    </FilesMatch>
+
     <FilesMatch "\.(html|htm)$">
-        Header set Cache-Control "max-age=90, must-revalidate, private"
-    </FilesMatch>
-    <FilesMatch "\.(js|css)$">
-        Header set Cache-Control "max-age=86400, must-revalidate, stale-while-revalidate=43200, public"
-    </FilesMatch>
-    <FilesMatch "\.(webp|jpg|jpeg|png|gif|pdf|ico|webm|mp4|ogg|svg|eot|ttf|otf|woff|woff2)$">
-        Header set Cache-Control "max-age=31536000, must-revalidate, stale-while-revalidate=86400, public, immutable"
+    Header set Cache-Control "public, max-age=3600, must-revalidate, stale-while-revalidate=60, stale-if-error=86400"
     </FilesMatch>
 </IfModule>
 
 # GZIP Compression
+<IfModule mod_brotli.c>
+    AddOutputFilterByType BROTLI_COMPRESS text/html text/plain text/xml text/css
+    AddOutputFilterByType BROTLI_COMPRESS text/javascript application/javascript application/json
+    AddOutputFilterByType BROTLI_COMPRESS application/xml application/xhtml+xml application/rss+xml
+    AddOutputFilterByType BROTLI_COMPRESS image/svg+xml application/wasm font/opentype font/ttf
+</IfModule>
+
 <IfModule mod_deflate.c>
-    AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css text/javascript
-    AddOutputFilterByType DEFLATE application/xml application/xhtml+xml application/rss+xml
-    AddOutputFilterByType DEFLATE application/javascript application/x-javascript
-    AddOutputFilterByType DEFLATE application/json
-    AddOutputFilterByType DEFLATE image/svg+xml
-    AddOutputFilterByType DEFLATE font/otf font/opentype
-    AddOutputFilterByType DEFLATE font/ttf font/truetype
-    AddOutputFilterByType DEFLATE application/vnd.ms-fontobject
-    AddOutputFilterByType DEFLATE application/x-font-woff
+    AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css
+    AddOutputFilterByType DEFLATE text/javascript application/javascript application/json
+    AddOutputFilterByType DEFLATE application/xml image/svg+xml application/wasm
 </IfModule>
 
 # PHP security
